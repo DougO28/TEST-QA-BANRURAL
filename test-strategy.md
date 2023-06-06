@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Juego de Adivina tu número</title>
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+      }
+      .lastResult {
+        color: white;
+        padding: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Juego Adivina tu número</h1>
+    <p>Hemos seleccionado un número aleatorio entre 1 y 100. Trata de adivinar el número en un total de 10 turnos o menos. No te preocupes, te diremos si el número es más alto o más bajo.</p>
+
+    <div class="form">
+      <label for="guessField">Ingresa un número entre 1 y 100:</label>
+      <input type="number" id="guessField" class="guessField" min="1" max="100">
+      <input type="submit" value="Adivinar" class="guessSubmit">
+    </div>
+
+    <div class="resultParas">
+      <p class="guesses"></p>
+      <p class="lastResult"></p>
+      <p class="lowOrHi"></p>
+    </div>
+
+    <script>
+      let randomNumber = Math.floor(Math.random() * 100) + 1;
+
+      const ATTEMPTS = 10;
+      let guessCount = 1;
+
+      const guesses = document.querySelector('.guesses');
+      const lastResult = document.querySelector('.lastResult');
+      const lowOrHi = document.querySelector('.lowOrHi');
+      const guessSubmit = document.querySelector('.guessSubmit');
+      const guessField = document.querySelector('.guessField');
+
+      function checkGuess() {
+        let userGuess = parseInt(guessField.value);
+
+        if (Number.isNaN(userGuess)) {
+          alert('Por favor, ingresa un número entero válido.');
+          return;
+        }
+
+        if (guessCount === 1) {
+          guesses.textContent = 'Números anteriores: ';
+        }
+        guesses.textContent += userGuess + ' ';
+
+        if (userGuess === randomNumber) {
+          lastResult.textContent = '¡Felicitaciones! ¡Adivinaste el número!';
+          lastResult.style.backgroundColor = 'green';
+          lowOrHi.textContent = '';
+          setGameOver();
+        } else if (guessCount === ATTEMPTS) {
+          lastResult.textContent = '¡Perdiste! El número era: ' + randomNumber;
+          lastResult.style.backgroundColor = 'red';
+          lowOrHi.textContent = '';
+          setGameOver();
+        } else {
+          lastResult.textContent = 'Incorrecto!';
+          lastResult.style.backgroundColor = 'black';
+          if (userGuess < randomNumber) {
+            lowOrHi.textContent = 'El número es mayor.';
+          } else {
+            lowOrHi.textContent = 'El número es menor.';
+          }
+        }
+
+        guessCount++;
+        guessField.value = '';
+        guessField.focus();
+      }
+
+      guessSubmit.addEventListener('click', checkGuess);
+
+      function setGameOver() {
+        guessField.disabled = true;
+        guessSubmit.disabled = true;
+        resetButton = document.createElement('button');
+        resetButton.textContent = 'Comenzar un nuevo juego';
+        document.body.appendChild(resetButton);
+        resetButton.addEventListener('click', resetGame);
+      }
+
+      function resetGame() {
+        guessCount = 1;
+        randomNumber = Math.floor(Math.random() * 100) + 1;
+
+        const resetParas = document.querySelectorAll('.resultParas p');
+        for (let i = 0; i < resetParas.length; i++) {
+          resetParas[i].textContent = '';
+        }
+
+        resetButton.parentNode.removeChild(resetButton);
+
+        guessField.disabled = false;
+        guessSubmit.disabled = false;
+        guessField.value = '';
+        guessField.focus();
+
+        lastResult.style.backgroundColor = 'white';
+      }
+    </script>
+  </body>
+</html>
