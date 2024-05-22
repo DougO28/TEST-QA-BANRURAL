@@ -19,12 +19,12 @@
       }
     </style>
   </head>
+
   <body>
     <h1>Juego Adivina tu número</h1>
-    <p>Hemps seleccionado un número aleatorio entre 1 a 100. Trata de adivinar el número, en un total de 10 turnos o menos. No te preocupes, te diremos si el número es más alto o más bajo.</p>
+    <p>Hemos seleccionado un número aleatorio entre 1 a 100. Trata de adivinar el número, en un total de 10 turnos o menos. No te preocupes, te diremos si el número es más alto o más bajo </p>
     <div class="form">
-      <label for="guessField">Ingresa el número para adivinar: </label>
-      <input type="text" id="guessField" class="guessField">
+      <label for="guessField">Ingresa el número a adivinar: </label><input type="text" id="guessField" class="guessField">
       <input type="submit" value="Ingresar el número aleatorio" class="guessSubmit">
     </div>
     <div class="resultParas">
@@ -32,12 +32,16 @@
       <p class="lastResult"></p>
       <p class="lowOrHi"></p>
     </div>
+
     <script>
-      let randomNumber = Math.floor(Math.random() * 100) + 1; // Corregido para generar entre 1 y 100, anteriormente era desde 0
-      const ATTEMPS = 10; // ahora permite 10 intentos
+      // se realizo el ajuste de la generación de números aleatorios al rango correcto de 1 a 100, estaba de 0 a 10
+      let randomNumber = Math.floor(Math.random() * 100) + 1;
+
+      // Corrección: Ajustar el número de intentos a 10.
+      const ATTEMPS = 10;
       const guesses = document.querySelector('.guesses');
       const lastResult = document.querySelector('.lastResult');
-      const lowOrHi = document.querySelector('.lowOrHi'); // se corrigio el selector
+      const lowOrHi = document.querySelector('.lowOrHi'); // Se añadio punto para seleccionar correctamente la clase, ya que daba error
       const guessSubmit = document.querySelector('.guessSubmit');
       const guessField = document.querySelector('.guessField');
 
@@ -45,28 +49,30 @@
       let resetButton;
 
       function checkGuess() {
-        const userGuess = Number(guessField.value); // se asegura que la entrada aunicamente sean numeros
+        let userGuess = Number(guessField.value); // se modificio para convertir  la entrada a número para comparar correctamente.
+
         if (guessCount === 1) {
-          guesses.textContent = 'Intentos: ';
+          guesses.textContent = 'Intentos anteriores: ';
         }
         guesses.textContent += userGuess + ' ';
 
+        //  se invirtio la lógica de verificación y mensajes según las reglas del juego, ya que la logica estaba como invertida
         if (userGuess === randomNumber) {
           lastResult.textContent = 'Felicitaciones! adivinaste el número!';
           lastResult.style.backgroundColor = 'green';
           lowOrHi.textContent = '';
           setGameOver();
         } else if (guessCount === ATTEMPS) {
-          lastResult.textContent = '!!!Perdiste!!!';
+          lastResult.textContent = '!!!Pérdistes!!!';
           lastResult.style.backgroundColor = 'red';
           setGameOver();
         } else {
           lastResult.textContent = 'Incorrecto! ';
-          lastResult.style.backgroundColor = 'white';
+          lastResult.style.backgroundColor = 'white'; // Se pueso  color de fondo blanco para consistencia.
           if (userGuess < randomNumber) {
-            lowOrHi.textContent = 'El número es mayor!';   //indica que el número es mayor al ingresado
+            lowOrHi.textContent = 'El número es mayor!';
           } else {
-            lowOrHi.textContent = 'El número es menor!';  // indica que el número es menor al ingresao
+            lowOrHi.textContent = 'El número es menor!';
           }
         }
 
@@ -74,6 +80,7 @@
         guessField.value = '';
         guessField.focus();
       }
+      // Se corrige sintaxis de 'addEventListener', estaba como addevet.
       guessSubmit.addEventListener('click', checkGuess);
 
       function setGameOver() {
@@ -82,7 +89,7 @@
         resetButton = document.createElement('button');
         resetButton.textContent = 'Comienza un nuevo juego';
         document.body.appendChild(resetButton);
-        resetButton.addEventListener('click', resetGame);
+        resetButton.addEventListener('click', resetGame); // Corregir la sintaxis de 'addEventListener',  estaba como addevet y daba error
       }
 
       function resetGame() {
@@ -101,10 +108,12 @@
 
         lastResult.style.backgroundColor = 'white';
 
-        randomNumber = Math.floor(Math.random() * 100) + 1; // corrección realizada
+        // se asegura que el número aleatorio se genere correctamente.
+        randomNumber = Math.floor(Math.random() * 100) + 1;
       }
     </script>
   </body>
 </html>
+
 
 
